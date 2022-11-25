@@ -32,8 +32,7 @@ class F3NFixPlugin : JavaPlugin(), Listener {
 
     override fun onEnable() {
         val f3nPermCommand = F3NFixCommand(this)
-        getCommand("f3nperm")!!.setExecutor(f3nPermCommand)
-        getCommand("f3nperm")!!.tabCompleter = f3nPermCommand
+        getCommand("f3f4fix")!!.apply { setExecutor(f3nPermCommand); tabCompleter = f3nPermCommand }
 
         server.pluginManager.registerEvents(F3NFixListener(this), this)
         try {

@@ -1,8 +1,10 @@
 package de.redgames.f3nperm.reflection
 
+import com.google.common.cache.CacheBuilder
 import com.google.common.collect.ImmutableMap
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
+import java.time.Duration
 
 object Reflections {
     // -------------
@@ -19,15 +21,15 @@ object Reflections {
         "char", Character.TYPE
     )
 
+    private val classCache = CacheBuilder.newBuilder().expireAfterAccess(Duration.ofMinutes(1)).build<String, Class<*>>()
+
     @Throws(ReflectionException::class)
     fun resolve(className: String): Class<*> {
-        val primitiveClass = primitives[className]
-        return primitiveClass
-            ?: try {
-                Class.forName(className)
-            } catch (e: ClassNotFoundException) {
-                throw ReflectionException("Class '$className' could not be resolved!", e)
-            }
+        return primitives[className] ?: classCache.getIfPresent(className) ?: try {
+            Class.forName(className).also { classCache.put(className, it) }
+        } catch (e: ClassNotFoundException) {
+            throw ReflectionException("Class '$className' could not be resolved!", e)
+        }
     }
 
     // -------------
