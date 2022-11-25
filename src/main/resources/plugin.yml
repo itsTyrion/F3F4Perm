@@ -1,30 +1,18 @@
 main: de.redgames.f3nperm.F3NPermPlugin
-api-version: 1.13 # Lowest possible api version for compatibility with 1.9+
+api-version: 1.18
 
-name: F3NPerm
+name: F3F4Fix
 version: ${version}
-authors: [Rodney_Mc_Kay]
-description: Allows to use Hotkey F3 + N with permissions
+authors: [Rodney_Mc_Kay, itsTyrion]
+description: Allows using they hotkeys F3+F4 (gamemode switch) and F3+N (spectator mode) with permissions
 
 softdepend:
   - ProtocolLib
   - LuckPerms
 
 commands:
-  f3nperm:
+  f3f4fix:
     description: "Command for administrative features of F3NPerm"
-    permission: "f3nperm.admin"
-    usage: "Usage: /<command> <forceupdate|reload>"
-
-permissions:
-  f3nperm.admin:
-    description: "Grants access to administrative functions of F3NPerm including the /f3nperm command"
-    default: op
-  f3nperm.use:
-    description: "Allows people to use F3 + N, the gamemode switcher and various other client hotkeys"
-    default: op
-  f3nperm.*:
-    description: "Grants full access to F3NPerm"
-    children:
-      - f3nperm.admin
-      - f3nperm.use
+    permission: "f3f4fix.admin"
+    usage: "§cUsage: /§c<command> §8<§6forceupdate§7|§6reload§8>"
+    aliases: [f3nfix]

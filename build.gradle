@@ -1,0 +1,41 @@
+
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.7.21'
+}
+
+group = "de.redgames"
+version = "3.1.2"
+
+def targetJavaVersion = 17
+
+// Dependencies
+
+repositories {
+    mavenCentral()
+
+    maven { url "https://hub.spigotmc.org/nexus/content/groups/public/" }
+    maven { url "https://repo.dmulloy2.net/repository/public/" }
+}
+
+dependencies {
+    compileOnly("org.spigotmc:spigot-api:1.19.2-R0.1-SNAPSHOT")
+    compileOnly("io.netty:netty-all:4.1.77.Final")
+
+    compileOnly("com.comphenix.protocol:ProtocolLib:5.+")
+    compileOnly("net.luckperms:api:5.4")
+    compileOnly("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.21")
+}
+
+// Add version to plugin.yml
+
+tasks.processResources {
+    def props = [version: version]
+    inputs.properties props
+    filteringCharset 'UTF-8'
+
+    filesMatching(["plugin.yml", "config.yml"]) { expand props }
+}
+
+compileKotlin.kotlinOptions {
+    jvmTarget = "$targetJavaVersion"
+}
