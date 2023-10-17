@@ -25,9 +25,9 @@ class ProtocolLibProvider(private val permPlugin: F3NFixPlugin) : Provider {
                 val packet = event.packet
 
                 if (packet.integers.read(0) == event.player.entityId) {
-                    if (fromStatusByte(permPlugin.serverVersion, packet.bytes.read(0)) != null) {
+                    if (fromStatusByte(packet.bytes.read(0)) != null) {
                         val targetLevel = permPlugin.getF3NFixPermissionLevel(event.player)
-                        packet.bytes.write(0, targetLevel.toStatusByte(permPlugin.serverVersion))
+                        packet.bytes.write(0, targetLevel.toStatusByte())
                     }
                 }
             }
@@ -42,7 +42,7 @@ class ProtocolLibProvider(private val permPlugin: F3NFixPlugin) : Provider {
         val level = permPlugin.getF3NFixPermissionLevel(player)
         val packet = PacketContainer(PacketType.Play.Server.ENTITY_STATUS)
         packet.integers.write(0, player.entityId)
-        packet.bytes.write(0, level.toStatusByte(permPlugin.serverVersion))
+        packet.bytes.write(0, level.toStatusByte())
         try {
             manager?.sendServerPacket(player, packet, false)
         } catch (e: InvocationTargetException) {

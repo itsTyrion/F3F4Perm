@@ -21,7 +21,7 @@ object Reflections {
         "char", Character.TYPE
     )
 
-    private val classCache = CacheBuilder.newBuilder().expireAfterAccess(Duration.ofMinutes(1)).build<String, Class<*>>()
+    private val classCache = CacheBuilder.newBuilder().expireAfterAccess(Duration.ofHours(12)).build<String, Class<*>>()
 
     @Throws(ReflectionException::class)
     fun resolve(className: String): Class<*> {
@@ -116,6 +116,18 @@ object Reflections {
     // -------------
     // Fields
     // -------------
+
+    @Throws(ReflectionException::class)
+    fun get(target: Any, name: String): Any {
+        val clazz: Class<*> = target.javaClass
+        try {
+            return clazz.getField(name).get(target)
+        } catch (e: NoSuchFieldException) {
+            throw ReflectionException("Could not access field " + name + " on " + clazz.canonicalName, e)
+        } catch (e: IllegalAccessException) {
+            throw ReflectionException("Could not access field " + name + " on " + clazz.canonicalName, e)
+        }
+    }
     @Throws(ReflectionException::class)
     fun getPrivate(target: Any, name: String): Any {
         val clazz = target.javaClass

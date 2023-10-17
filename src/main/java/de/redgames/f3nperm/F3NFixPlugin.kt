@@ -13,8 +13,7 @@ import java.util.logging.Level
 class F3NFixPlugin : JavaPlugin(), Listener {
     private val hooks = LuckPermsHook()
     lateinit var provider: Provider
-    var serverVersion: ServerVersion? = null
-        private set
+    private var serverVersion: ServerVersion? = null
     private lateinit var settings: Settings
 
     override fun onLoad() {
@@ -73,13 +72,15 @@ class F3NFixPlugin : JavaPlugin(), Listener {
     private fun findProvider(): Provider {
         if (server.pluginManager.getPlugin("ProtocolLib") != null && settings.useProtocolLib) {
             return ProtocolLibProvider(this)
-        } else if (serverVersion == null)
-            throw ProviderException("Server version cannot be detected and ProtocolLib is disabled!")
-
-        return if (serverVersion!!.isLowerThan(ServerVersion.v_1_19)) {
-            ReflectionProvider_1_18_2(this)
-        } else
-            ReflectionProvider_1_19(this)
+        }
+        val serverVersion = this.serverVersion
+            ?: throw ProviderException("Server version cannot be detected and ProtocolLib is disabled/missing!")
+        return when {
+            serverVersion.isLowerThan(ServerVersion.v_1_19) -> ReflectionProvider_1_18_R2(this)
+            serverVersion.isLowerThan(ServerVersion.v_1_19_4) -> ReflectionProvider_1_19_R1(this)
+            serverVersion.isLowerThan(ServerVersion.v_1_20_2) -> ReflectionProvider_1_19_R3(this)
+            else -> ReflectionProvider_1_20_R2(this)
+        }
     }
 
     fun getF3NFixPermissionLevel(player: Player): OpPermissionLevel {

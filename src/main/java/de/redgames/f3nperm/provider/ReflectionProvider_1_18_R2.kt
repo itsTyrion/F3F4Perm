@@ -8,19 +8,19 @@ import de.redgames.f3nperm.reflection.Reflections
 import io.netty.channel.Channel
 import org.bukkit.entity.Player
 
-open class ReflectionProvider_1_18_2(plugin: F3NFixPlugin) : NettyProvider(plugin) {
+open class ReflectionProvider_1_18_R2(plugin: F3NFixPlugin) : NettyProvider(plugin) {
     @Throws(ReflectionException::class)
-    fun getChannel(networkManager: Any): Any = Reflections.getPrivate(networkManager, "m")
+    open fun getChannel(networkManager: Any): Any = Reflections.getPrivate(networkManager, "m")
 
     // 1.18
     @Throws(ReflectionException::class)
-    fun sendPacket(playerConnection: Any, packet: Any) {
+    open fun sendPacket(playerConnection: Any, packet: Any) {
         Reflections.call(playerConnection, "a(net.minecraft.network.protocol.Packet)", packet)
     }
 
     //1.17
     @Throws(ReflectionException::class)
-    fun getPlayerConnection(entityPlayer: Any): Any = Reflections.getPrivate(entityPlayer, "b")
+    open fun getPlayerConnection(entityPlayer: Any): Any = Reflections.getPrivate(entityPlayer, "b")
 
 
     @Throws(ReflectionException::class)
@@ -44,7 +44,7 @@ open class ReflectionProvider_1_18_2(plugin: F3NFixPlugin) : NettyProvider(plugi
         val entityPlayer = getEntityPlayer(player)
         val playerConnection = getPlayerConnection(entityPlayer)
 
-        sendPacket(playerConnection, makeStatusPacket(entityPlayer, level.toStatusByte(plugin.serverVersion)))
+        sendPacket(playerConnection, makeStatusPacket(entityPlayer, level.toStatusByte()))
     } catch (e: ReflectionException) {
         throw ProviderException("Could not send packet!", e)
     }
@@ -82,10 +82,10 @@ open class ReflectionProvider_1_18_2(plugin: F3NFixPlugin) : NettyProvider(plugi
 
     @Throws(ReflectionException::class)
     fun getStatusPacketStatus(packet: Any): OpPermissionLevel? =
-        fromStatusByte(plugin.serverVersion, (Reflections.getPrivate(packet, "b") as Byte))
+        fromStatusByte((Reflections.getPrivate(packet, "b") as Byte))
 
 
     @Throws(ReflectionException::class)
     fun setStatusPacketStatus(packet: Any, level: OpPermissionLevel) =
-        Reflections.setPrivate(packet, "b", level.toStatusByte(plugin.serverVersion))
+        Reflections.setPrivate(packet, "b", level.toStatusByte())
 }

@@ -1,14 +1,15 @@
-main: de.redgames.f3nperm.F3NPermPlugin
+main: de.redgames.f3nperm.F3NFixPlugin
 api-version: 1.18
 
 name: F3F4Fix
-version: ${version}
+version: @version@
 authors: [Rodney_Mc_Kay, itsTyrion]
 description: Allows using they hotkeys F3+F4 (gamemode switch) and F3+N (spectator mode) with permissions
 
 softdepend:
   - ProtocolLib
   - LuckPerms
+  - KotlinLoader
 
 commands:
   f3f4fix:

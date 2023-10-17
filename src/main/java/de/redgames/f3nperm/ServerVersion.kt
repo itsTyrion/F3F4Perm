@@ -18,6 +18,10 @@ class ServerVersion(private val major: Int, private val minor: Int, private val 
     companion object {
         @JvmField
         val v_1_19 = ServerVersion(1, 19, 1)
+        @JvmField
+        val v_1_19_4 = ServerVersion(1, 19, 4)
+        @JvmField
+        val v_1_20_2 = ServerVersion(1, 20, 2)
 
         private val PACKAGE_PATTERN = Pattern.compile("v(\\d+)_(\\d+)_R(\\d+)")
         @JvmStatic

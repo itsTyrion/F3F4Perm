@@ -1,4 +1,4 @@
-# Config generated with plugin version: ${version}
+# Config generated with plugin version: @version@
 
 
 # Whether the plugin should attempt to use ProtocolLib for its functionality.
